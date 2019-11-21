@@ -164,7 +164,7 @@ namespace GameBase.UI
 
             if (window)
             {
-                //先将对象设置为活动状态,否则非活动状态下载后面修改Canvas的overrideSorting属性会失败
+                //先将对象设置为活动状态,否则非活动状态下在后面修改Canvas的overrideSorting属性会失败
                 window.gameObject.SetActive(true);
                 Canvas canvas = window.transform.GetOrAddComponent<Canvas>();
                 canvas.overrideSorting = true;
@@ -175,7 +175,6 @@ namespace GameBase.UI
             {
                 window = CreateWindow<T>();
             }
-                
             return window;
         }
 
@@ -231,9 +230,6 @@ namespace GameBase.UI
         {
             m_windowStack.Push(window);
         }
-
-
-        
     }
 
 }
