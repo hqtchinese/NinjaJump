@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace GameBase
 {
-    public class SingletonMono<T> : MonoBehaviour where T : MonoBehaviour
+    public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         private static T m_instance;
         public static T Instance 
@@ -18,6 +18,23 @@ namespace GameBase
                     {
                         m_instance = obj as T;
                     }
+                }
+                return m_instance;
+            }
+        }
+
+    }
+
+    public class Singleton<T> where T : new()
+    {
+        private static T m_instance;
+        public static T Instance
+        {
+            get
+            {
+                if(m_instance == null)
+                {
+                    m_instance = new T();
                 }
                 return m_instance;
             }

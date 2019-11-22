@@ -53,7 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Frame\Base\Plugins\RenameField\Editor\RenameFieldDrawer.cs" />
+     <Compile Include="Assets\Base\Scripts\Tools\RenameField\Editor\RenameFieldDrawer.cs" />
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>D:/Project/NinjaJump/UnityProject/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>

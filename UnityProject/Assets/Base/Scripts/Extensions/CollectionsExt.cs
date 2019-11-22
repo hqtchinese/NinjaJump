@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 
 
@@ -65,6 +65,17 @@ public static class CollectionExt
     public static T Random<T>(this List<T> list)
     {
         return list[UnityEngine.Random.Range(0, list.Count)];
+    }
+
+    public static Dictionary<TKey,TVal> ToDict<TKey,TVal>(this List<TVal> list,Func<TVal,TKey> func)
+    {
+        Dictionary<TKey,TVal> dict = new Dictionary<TKey, TVal>();
+        foreach (var item in list)
+        {
+            dict.Add(func(item),item);
+        }
+
+        return dict;
     }
 
     #endregion
