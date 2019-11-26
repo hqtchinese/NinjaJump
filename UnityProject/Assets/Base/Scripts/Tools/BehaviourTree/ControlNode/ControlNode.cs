@@ -26,7 +26,7 @@ namespace GameBase.Tool.Behaviour
         
         public override NodeStatus Begin()
         {
-            if (SubNodes != null && SubNodes.Length == 0)
+            if (SubNodes == null || SubNodes.Length == 0)
                 return NodeStatus.Complete;
              
             return NodeStatus.Processing;

@@ -6,7 +6,8 @@ namespace GameBase.Tool.Tween
     public enum CurveType
     {
         Default,
-        Bounce
+        Bounce,
+        Smooth,
     }
     public abstract class Tweener
     {
@@ -100,7 +101,7 @@ namespace GameBase.Tool.Tween
         protected override void Action(float factor)
         {
             factor = Curve.Evaluate(factor);
-            Quaternion.LerpUnclamped(Target.rotation,EndRot,factor);
+            Target.rotation = Quaternion.LerpUnclamped(m_startRot,EndRot,factor);
         }
         
     }
@@ -120,7 +121,7 @@ namespace GameBase.Tool.Tween
         protected override void Action(float factor)
         {
             factor = Curve.Evaluate(factor);
-            Vector2.LerpUnclamped(m_startPos,EndPos,factor);
+            RectTarget.anchoredPosition = Vector2.LerpUnclamped(m_startPos,EndPos,factor);
         }
     }
 }

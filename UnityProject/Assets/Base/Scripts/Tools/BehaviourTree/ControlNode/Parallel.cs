@@ -13,13 +13,11 @@ namespace GameBase.Tool.Behaviour
             {
                 for (int i = 0; i < SubNodes.Length; i++)
                 {
-                    NodeStatus status = SubNodes[i].Execute();
+                    SubNodes[i].Execute();
                 }
             }
 
             return NodeStatus.Processing;
         }
-
     }
-    
 }

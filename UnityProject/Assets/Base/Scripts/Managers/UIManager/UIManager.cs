@@ -70,7 +70,7 @@ namespace GameBase.UI
         /// 打开窗口并推至栈顶,如果还未创建则创建
         /// </summary>
         /// <typeparam name="T">窗口类型</typeparam>
-        public void OpenWindow<T>() where T : UIWindow
+        public T OpenWindow<T>() where T : UIWindow
         {
             if (m_windowDict.TryGetValue(typeof(T),out UIWindow window))
             {
@@ -78,9 +78,11 @@ namespace GameBase.UI
             }
             else
             {
-                AddWindow<T>()?.Open();
+                window = AddWindow<T>();
+                window?.Open();
             }
             Push<T>();
+            return window as T;
         }
 
         /// <summary>
