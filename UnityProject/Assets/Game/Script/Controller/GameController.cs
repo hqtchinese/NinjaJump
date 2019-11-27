@@ -8,32 +8,38 @@ namespace NinjaJump
     
     public class GameController : MonoSingleton<GameController>
     {
+
+        //游戏的3层
+        public Transform BackLayer,GameLayer,FrontLayer;
+
+
+
         public Vector2 ViewPos;
         public GameState State { get; private set; }
+        public RoleController Role { get; private set; }
+
 
         protected override void Awake()
         {
             base.Awake();
-            
+            CreateGameScene();    
         }
 
         //加载游戏场景中的物体、UI等
-        private void InitGameScene()
+        private void CreateGameScene()
+        {
+            //实例化角色
+            GameObject playerPrefab = ResourceManager.Instance.Load<RoleController>();
+            Role = Instantiate(playerPrefab,GameLayer).GetComponent<RoleController>();
+        }
+
+
+        public void InitGame()
         {
 
         }
 
-        
-
-
     }
 
-    public enum GameState
-    {
-        Ready,
-        Gaming,
-        Pause,
-        GameOver,
-
-    }
+    
 }

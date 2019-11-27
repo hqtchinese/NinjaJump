@@ -540,6 +540,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb2455176e84fa044ab6541b6a168907, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BackLayer: {fileID: 2048209225}
+  MiddleLayer: {fileID: 1808739230}
+  FrontLayer: {fileID: 998859115}
   ViewPos: {x: 0, y: 0}
 --- !u!1 &1100896983
 GameObject:
