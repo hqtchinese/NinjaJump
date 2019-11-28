@@ -23,6 +23,11 @@ namespace GameBase
             }
         }
 
+        protected virtual void Awake()
+        {
+            if (!m_instance)
+                m_instance = this as T;
+        }
     }
 
     public class Singleton<T> where T : new()
