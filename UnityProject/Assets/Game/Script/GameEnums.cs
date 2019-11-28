@@ -5,6 +5,12 @@ using UnityEngine;
 namespace NinjaJump
 {
     
+    public enum SceneInitState
+    {
+        InitScene,
+        InitRole,
+    }
+
     public enum GameEvent
     {
         OnGameStart,
@@ -19,5 +25,14 @@ namespace NinjaJump
         Gaming,
         Pause,
         GameOver,
+    }
+
+    public enum RoleStatus
+    {
+        Standing,
+        Moving,
+        Attack,
+        Holding,
+        Dying
     }
 }

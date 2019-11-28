@@ -5,24 +5,36 @@ using GameBase;
 
 namespace NinjaJump
 {
-    
     public class GameController : MonoSingleton<GameController>
     {
 
         //游戏的3层
         public Transform BackLayer,GameLayer,FrontLayer;
+        public TouchEventHelper TouchBoard;
 
-
+        public SpriteRenderer sprite;
 
         public Vector2 ViewPos;
+        public Vector2 Speed;
+
         public GameState State { get; private set; }
         public RoleController Role { get; private set; }
 
 
-        protected override void Awake()
+
+        protected void Start()
         {
-            base.Awake();
-            CreateGameScene();    
+            EventManager.Instance.Broadcast(SceneInitState.InitScene);
+            CreateGameScene();
+            Debug.Log(sprite.size);
+        }
+
+        public void Update()
+        {
+            if (State == GameState.Gaming)
+            {
+                
+            }
         }
 
         //加载游戏场景中的物体、UI等
@@ -38,6 +50,7 @@ namespace NinjaJump
         {
 
         }
+
 
     }
 
