@@ -357,7 +357,9 @@ MonoBehaviour:
   GameLayer: {fileID: 1808739230}
   FrontLayer: {fileID: 998859115}
   TouchBoard: {fileID: 131250868336248506}
+  sprite: {fileID: 1100896986}
   ViewPos: {x: 0, y: 0}
+  Speed: {x: 0, y: 1}
 --- !u!1 &1100896983
 GameObject:
   m_ObjectHideFlags: 0
@@ -370,12 +372,12 @@ GameObject:
   - component: {fileID: 1100896986}
   - component: {fileID: 1100896985}
   m_Layer: 0
-  m_Name: BgImg (1)
+  m_Name: BackBoard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1100896984
 Transform:
   m_ObjectHideFlags: 0
@@ -464,7 +466,7 @@ GameObject:
   - component: {fileID: 1758635023}
   - component: {fileID: 1758635025}
   m_Layer: 0
-  m_Name: BgImg (2)
+  m_Name: BgImg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
