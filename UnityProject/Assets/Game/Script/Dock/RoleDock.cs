@@ -6,14 +6,16 @@ using GameBase;
 namespace NinjaJump
 {
     [Resource("Prefab/Role/Ninja")]
-    public class RoleController : Dock
+    public class RoleDock : Dock
     {
-        public RoleStatus Status { get; protected set; }
-        
+        public Transform Arrow;
+
+        public RoleStatus Status { get; set; }
+        public FaceDir Dir { get; set; }
+
         protected override void Init()
         {
-            AddModule<RoleInputeModule>();
-            AddModule<RoleActionModule>();
+            AddModule<RoleControlModule>();
         }
 
     }

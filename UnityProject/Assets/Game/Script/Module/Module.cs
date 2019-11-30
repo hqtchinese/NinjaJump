@@ -15,8 +15,9 @@ namespace NinjaJump
     public abstract class Module
     {
         public bool Enable { get; set; }
-
-        public bool CanMutiModule  { get; protected set; }
+        //是否允许一个Dock上有多个该类型模组,在子类中重写
+        public virtual bool CanMutiModule => false;
+        //依赖的模组类型,在构造器中初始化,没有可为空
         public Type[] Dependence { get; protected set; }
 
         public Module()
@@ -25,6 +26,11 @@ namespace NinjaJump
         }
 
         public virtual void Init()
+        {
+
+        }
+
+        public virtual void Awake()
         {
 
         }
@@ -44,7 +50,7 @@ namespace NinjaJump
 
         }
         
-        public virtual void Distroy()
+        public virtual void Destroy()
         {
 
         }

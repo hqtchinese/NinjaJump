@@ -12,11 +12,21 @@ namespace NinjaJump
         {
             ModuleList = new List<Module>();
             Init();
+            InitAllModule();
         }
+
 
         protected virtual void Init()
         {
 
+        }
+        
+        protected virtual void InitAllModule()
+        {
+            foreach (var module in ModuleList)
+            {
+                module.Init();
+            }
         }
 
         protected virtual void OnEnable()
@@ -44,7 +54,7 @@ namespace NinjaJump
             }
         }
 
-        public Module AddModule(Module module,bool createDependence = false)
+        public Module AddModule(Module module,bool createDependence = true)
         {
             if (module == null)
                 return null;
@@ -70,16 +80,16 @@ namespace NinjaJump
                 {
                     foreach (var item in module.Dependence)
                     {
-                        AddModule(Activator.CreateInstance(item,new object[]{this}) as Module);
+                        AddModule(Activator.CreateInstance(item,new object[]{this}) as Module,createDependence);
                     }
                 }
             }
 
-            module.Init();
+            module.Awake();
             return module;
         }
 
-        public T AddModule<T>(bool createDependence = false) where T : Module
+        public T AddModule<T>(bool createDependence = true) where T : Module
         {
             T module = Activator.CreateInstance(typeof(T),new object[]{this}) as T;
             return AddModule(module,createDependence) as T;
@@ -88,7 +98,7 @@ namespace NinjaJump
         public void RemoveModule(Module module)
         {
             ModuleList.Remove(module);
-            module.Distroy();
+            module.Destroy();
         }
 
         public T GetModule<T>(bool createIfNull = false) where T : Module
@@ -116,11 +126,11 @@ namespace NinjaJump
             return list;
         }
 
-        public void Ondestroy()
+        public void OnDestroy()
         {
             foreach (var module in ModuleList)
             {
-                module.Distroy();
+                module.Destroy();
             }
 
             ModuleList.Clear();

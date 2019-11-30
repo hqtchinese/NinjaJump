@@ -4,13 +4,17 @@ using UnityEngine.EventSystems;
 
 namespace NinjaJump
 {
+    //触摸事件帮助类,检测当前对象上的触摸或者点击操作,发送封装好的事件:点击、长按、拖动
     public class TouchEventHelper : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
     {
         public bool CheckLongPress;
+        public float LongPressTime = 1f;
+        public float DragThreshold = 0.2f;
 
         public event Action ClickEvent;
         public event Action<Vector2> BeginDragEvent;
         public event Action<Vector2> DragEvent;
+        public event Action<Vector2> EndDragEvent;
         public event Action LongPressEvent;
 
         private TouchStatus m_status = TouchStatus.NoTouch;
@@ -22,7 +26,7 @@ namespace NinjaJump
             if (CheckLongPress && m_status == TouchStatus.Press)
             {
                 m_pressTimer += Time.deltaTime;
-                if (m_pressTimer > GameDefine.LONG_PRESS_TIME)
+                if (m_pressTimer > LongPressTime)
                 {
                     DoLongPress();
                 }
@@ -47,7 +51,7 @@ namespace NinjaJump
                 DoClick();
             
             if (m_status == TouchStatus.Dragging)
-                Init();
+                DoEndDrag(eventData.position);
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -58,7 +62,7 @@ namespace NinjaJump
             }
             else if (m_status == TouchStatus.Press)
             {
-                if (Vector2.Distance(m_pressedPos,eventData.position) > GameDefine.DRAG_BEGIN_DIS)
+                if (Vector2.Distance(m_pressedPos,eventData.position) > DragThreshold)
                 {
                     DoBeginDrag(eventData.position);
                 }
@@ -80,6 +84,12 @@ namespace NinjaJump
         private void DoDrag(Vector2 pos)
         {
             DragEvent?.Invoke(pos);
+        }
+
+        private void DoEndDrag(Vector2 pos)
+        {
+            EndDragEvent?.Invoke(pos);
+            Init();
         }
 
         private void DoLongPress()

@@ -29,10 +29,17 @@ namespace NinjaJump
 
     public enum RoleStatus
     {
-        Standing,
-        Moving,
+        Stand,
+        Jump,
         Attack,
-        Holding,
+        Hold,
+        Aim,
         Dying
+    }
+
+    public enum FaceDir
+    {
+        Left,
+        Right
     }
 }

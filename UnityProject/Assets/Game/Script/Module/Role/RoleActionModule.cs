@@ -4,15 +4,19 @@ using UnityEngine;
 
 namespace NinjaJump
 {
-    public class RoleActionModule : Module<RoleController>
+    public class RoleActionModule : Module<RoleDock>
     {
 
-        public RoleActionModule(RoleController dock) : base(dock)
+        public RoleActionModule(RoleDock dock) : base(dock)
         {
-            CanMutiModule = false;
         }    
         
-        
+        public void Jump(Vector2 direction)
+        {
+            Debug.Log("jump");
+            if (m_dock.Status != RoleStatus.Aim)
+                return;
+        }
 
     }
 }
