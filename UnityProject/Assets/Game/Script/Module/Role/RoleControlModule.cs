@@ -19,7 +19,7 @@ namespace NinjaJump
         
         public override void Init()
         {
-            m_dock.Status = RoleStatus.Aim;
+            m_dock.Status = RoleStatus.Hold;
             m_dock.Dir = FaceDir.Right;
         }
 
@@ -41,21 +41,12 @@ namespace NinjaJump
         {
             if (m_dock.Status != RoleStatus.Aim)
                 return;
-            
-            if (pos.y > m_baseHeight)
-            {
-
-            }
-            else if(pos.y < m_baseHeight)
-            {
-
-            }
 
             float angleChange = m_dock.Dir == FaceDir.Left ? m_baseHeight - pos.y : pos.y - m_baseHeight;
 
             angleChange *= m_factor;
 
-            float angle = Mathf.Clamp(Arrow.rotation.eulerAngles.z + angleChange,m_baseAngle - 60, m_baseAngle + 60);
+            float angle = Mathf.Clamp(Arrow.rotation.eulerAngles.z + angleChange,m_baseAngle - 80, m_baseAngle + 80);
 
             Arrow.rotation = Quaternion.Euler(0,0,angle);
 
@@ -64,9 +55,11 @@ namespace NinjaJump
 
         public void DoBeginDrag(Vector2 pos)
         {
-            if (m_dock.Status != RoleStatus.Aim)
+            if (m_dock.Status != RoleStatus.Hold)
                 return;
             
+            m_dock.Status = RoleStatus.Aim;
+
             m_baseHeight = pos.y;
             m_baseAngle = m_dock.Dir == FaceDir.Left ? 90 : 270;
             Arrow.rotation = Quaternion.Euler(0,0,m_baseAngle);
@@ -76,7 +69,8 @@ namespace NinjaJump
         {
             if (m_dock.Status != RoleStatus.Aim)
                 return;
-            Debug.Log("jump");
+            
+            m_actionModule.Jump(pos);
         }
 
         public override void Destroy()

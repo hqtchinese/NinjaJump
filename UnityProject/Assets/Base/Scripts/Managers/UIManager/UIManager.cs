@@ -232,6 +232,15 @@ namespace GameBase.UI
         {
             m_windowStack.Push(window);
         }
+
+        /// <summary>
+        /// 释放所有窗口
+        /// </summary>
+        private void ReleaseAll()
+        {
+            m_windowDict.Clear();
+            m_windowStack.Clear();
+        }
     }
 
 }

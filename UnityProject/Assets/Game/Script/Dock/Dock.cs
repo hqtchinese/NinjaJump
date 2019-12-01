@@ -54,45 +54,44 @@ namespace NinjaJump
             }
         }
 
-        public Module AddModule(Module module,bool createDependence = true)
+        private Module AddModule(Module module,bool createDependence = true)
         {
             if (module == null)
                 return null;
             
-            if (module.CanMutiModule)
-            {
-                if (ModuleList.IndexOf(module) < 0)
-                    ModuleList.Add(module);
-            }
-            else
-            {
-                foreach (var item in ModuleList)
-                {
-                    if (item == module || item.GetType() == module.GetType())
-                        return null;
-                }
-                ModuleList.Add(module);
-            }
-            
+            ModuleList.Add(module);
             if (createDependence)
             {
                 if (module.Dependence != null)
                 {
                     foreach (var item in module.Dependence)
                     {
-                        AddModule(Activator.CreateInstance(item,new object[]{this}) as Module,createDependence);
+                        AddModule(item,createDependence);
                     }
                 }
             }
 
             module.Awake();
+            Debug.Log($"{gameObject.name}增加模块:{module.GetType().Name}");
             return module;
         }
 
         public T AddModule<T>(bool createDependence = true) where T : Module
         {
-            T module = Activator.CreateInstance(typeof(T),new object[]{this}) as T;
-            return AddModule(module,createDependence) as T;
+            return AddModule(typeof(T),createDependence) as T;
+        }
+
+        public Module AddModule(Type type, bool createDependence = true)
+        {
+            foreach (var item in ModuleList)
+            {
+                if (item.GetType() == type.GetType())
+                {
+                    Debug.LogWarning($"模块已存在:{item.GetType().Name}");
+                    return null;
+                }
+            }
+            return AddModule(Activator.CreateInstance(type,new object[]{this}) as Module,createDependence);
         }
 
         public void RemoveModule(Module module)

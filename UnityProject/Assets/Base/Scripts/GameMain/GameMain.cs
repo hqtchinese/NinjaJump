@@ -11,7 +11,7 @@ namespace GameBase
         private static GameMain m_instance;
 
         public static GameMain Instance 
-        { 
+        {
             get
             {
                 if(m_instance == null)

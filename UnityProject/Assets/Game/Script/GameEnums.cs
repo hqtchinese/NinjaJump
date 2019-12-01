@@ -31,6 +31,7 @@ namespace NinjaJump
     {
         Stand,
         Jump,
+        Move,
         Attack,
         Hold,
         Aim,
