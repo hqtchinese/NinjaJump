@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Arrow: {fileID: 4997103835914293297}
+  ArrowCenter: {fileID: 1441341002310652531}
 --- !u!1 &4264822570823698929
 GameObject:
   m_ObjectHideFlags: 0

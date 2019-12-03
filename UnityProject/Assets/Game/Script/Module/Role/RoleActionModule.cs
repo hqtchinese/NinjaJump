@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace NinjaJump
 {
+    [RequireModule(typeof(RoleAnimeModule))]
     public class RoleActionModule : Module<RoleDock>
     {
         private RoleAnimeModule m_animeModule;
@@ -13,7 +14,6 @@ namespace NinjaJump
 
         public RoleActionModule(RoleDock dock) : base(dock)
         {
-            Dependence = new System.Type[]{typeof(RoleAnimeModule)};
         }
         
         public override void Awake()
@@ -30,13 +30,13 @@ namespace NinjaJump
             }
         }
 
-        public void Jump(Vector2 targetPos)
+        public void Jump()
         {
             Debug.Log("jump");
             if (m_dock.Status != RoleStatus.Aim)
                 return;
 
-            m_moveDir = targetPos - transform.position.ToVec2();
+            m_moveDir = m_dock.ArrowCenter.transform.position - transform.position;
             
             m_moveDir.Normalize();
             m_dock.Status = RoleStatus.Jump;

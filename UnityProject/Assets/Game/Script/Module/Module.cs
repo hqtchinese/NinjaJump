@@ -15,44 +15,27 @@ namespace NinjaJump
     public abstract class Module
     {
         public bool Enable { get; set; }
-        //依赖的模组类型,在构造器中初始化,没有可为空
-        public Type[] Dependence { get; protected set; }
 
         public Module()
         {
             Enable = true;
         }
 
-        public virtual void Init()
-        {
-
-        }
-
-        public virtual void Awake()
-        {
-
-        }
-
-        public virtual void Update()
-        {
-
-        }
-
-        public virtual void OnEnable()
-        {
-
-        }
-
-        public virtual void OnDisable()
-        {
-
-        }
-        
-        public virtual void Destroy()
-        {
-
-        }
+        public virtual void Init(){}
+        public virtual void Awake(){}
+        public virtual void Update(){}
+        public virtual void OnEnable(){}
+        public virtual void OnDisable(){}
+        public virtual void Destroy(){}
 
     }
 
+    public class RequireModuleAttribute : Attribute
+    {
+        public Type type;
+        public RequireModuleAttribute(Type _type)
+        {
+            type = _type;
+        }
+    }
 }

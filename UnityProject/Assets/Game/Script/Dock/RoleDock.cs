@@ -9,7 +9,8 @@ namespace NinjaJump
     public class RoleDock : Dock
     {
         public Transform Arrow;
-
+        public Transform ArrowCenter;
+        
         public RoleStatus Status { get; set; }
         public FaceDir Dir { get; set; }
 

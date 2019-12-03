@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace NinjaJump
 {
+    [RequireModule(typeof(RoleActionModule))]
     public class RoleControlModule : Module<RoleDock>
     {
         private Transform Arrow => m_dock.Arrow;
@@ -14,7 +15,6 @@ namespace NinjaJump
 
         public RoleControlModule(RoleDock dock) : base(dock)
         {
-            Dependence = new System.Type[]{typeof(RoleActionModule)};
         }
         
         public override void Init()
@@ -34,7 +34,6 @@ namespace NinjaJump
 
         public void DoClick()
         {
-            m_actionModule.Jump(Vector2.zero);
         }
 
         public void DoDrag(Vector2 pos)
@@ -69,8 +68,8 @@ namespace NinjaJump
         {
             if (m_dock.Status != RoleStatus.Aim)
                 return;
-            
-            m_actionModule.Jump(pos);
+                
+            m_actionModule.Jump();
         }
 
         public override void Destroy()

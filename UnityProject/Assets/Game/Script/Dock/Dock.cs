@@ -8,7 +8,7 @@ namespace NinjaJump
     {
         protected List<Module> ModuleList { get; set; }
 
-        protected virtual void Awake()
+        protected void Awake()
         {
             ModuleList = new List<Module>();
             Init();
@@ -16,6 +16,7 @@ namespace NinjaJump
         }
 
 
+        //初始化方法,添加模块写在这里
         protected virtual void Init()
         {
 
@@ -62,12 +63,12 @@ namespace NinjaJump
             ModuleList.Add(module);
             if (createDependence)
             {
-                if (module.Dependence != null)
+                Attribute[] attributes = Attribute.GetCustomAttributes(module.GetType(),typeof(RequireModuleAttribute));
+                foreach (var attr in attributes)
                 {
-                    foreach (var item in module.Dependence)
-                    {
-                        AddModule(item,createDependence);
-                    }
+                    RequireModuleAttribute requireAttr = attr as RequireModuleAttribute;
+                    if (requireAttr != null)
+                        AddModule(requireAttr.type, createDependence);
                 }
             }
 
@@ -104,8 +105,9 @@ namespace NinjaJump
         {
             foreach (var module in ModuleList)
             {
-                if (module is T)
-                    return module as T;            
+                T retModule = module as T;
+                if (retModule != null)
+                    return module as T;
             }
 
             if (createIfNull)
