@@ -29,6 +29,7 @@ namespace NinjaJump
 
     public enum RoleStatus
     {
+        None,
         Stand,
         Jump,
         Move,
