@@ -59,6 +59,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Factor: 0.4
   VerticleLoop: 1
+  Lerp: 1
+  LerpRate: 0.1
   Position: {x: 0, y: 0}
 --- !u!1 &179467783359773385
 GameObject:
@@ -470,6 +472,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Factor: 0.2
   VerticleLoop: 1
+  Lerp: 1
+  LerpRate: 0.1
   Position: {x: 0, y: 0}
 --- !u!1 &179467784504730404
 GameObject:
@@ -544,6 +548,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Factor: 0.1
   VerticleLoop: 1
+  Lerp: 1
+  LerpRate: 0.1
   Position: {x: 0, y: 0}
 --- !u!1 &179467785355207548
 GameObject:

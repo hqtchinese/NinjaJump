@@ -12,6 +12,10 @@ namespace NinjaJump
         [Range(0,1)]
         public float Factor;
         public bool VerticleLoop;
+        public bool Lerp;
+        public float LerpRate;
+
+        [HideInInspector]
         public Vector2 Position;
         private Vector2 ViewPos => GameController.Instance.ViewPos;
         private LinkedList<SpriteRenderer> m_spriteList;
@@ -25,8 +29,15 @@ namespace NinjaJump
 
         
         public void Update()
-        {
-            transform.position = (Position - ViewPos) * Factor;
+        {   
+            if (Lerp)
+            {
+                transform.position = Vector3.Lerp(transform.position,(Position - ViewPos) * Factor,LerpRate);
+            }
+            else
+            {
+                transform.position = (Position - ViewPos) * Factor;
+            }
 
             if (VerticleLoop)
                 CheckChildren();
