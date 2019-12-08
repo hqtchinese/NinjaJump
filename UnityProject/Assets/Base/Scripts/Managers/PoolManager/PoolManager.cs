@@ -7,8 +7,8 @@ namespace GameBase.Pool
     public class PoolManager : ManagerBase<PoolManager>
     {
         private const string DEFAULT_POOL = "default";
-
         private Dictionary<string,Pool> m_poolDict;
+
         public Pool this[string key]
         {
             get
@@ -48,6 +48,29 @@ namespace GameBase.Pool
             this[DEFAULT_POOL].Despawn(obj, isDestroy);
         }
 
+        public void ReleasePool(Pool pool)
+        {
+            foreach (var item in m_poolDict)
+            {
+                if (item.Value == pool)
+                {
+                    m_poolDict.Remove(item.Key);
+                    pool.Destroy();
+                    GC.Collect();
+                    break;
+                }
+            }
+        }
+
+        public void ReleasePool(string name)
+        {
+            if (m_poolDict.TryGetValue(name, out Pool pool))
+            {
+                m_poolDict.Remove(name);
+                pool.Destroy();
+            }
+            GC.Collect();
+        }
 
         public void OnDestroy()
         {

@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using GameBase;
+using GameBase.UI;
 
 namespace NinjaJump
 {
@@ -11,7 +13,6 @@ namespace NinjaJump
         public Transform GameTrans;
         public Transform EnvTrans;
 
-        public TouchEventHelper TouchBoard;
 
 
         public Vector2 ViewPos;
@@ -19,51 +20,25 @@ namespace NinjaJump
 
         public GameState State { get; private set; }
         public RoleDock Role { get; private set; }
-
+        public GameModeBase GameMode { get; private set; }
 
 
         protected void Start()
         {
-            EventManager.Instance.Broadcast(SceneInitState.InitScene);
-            CreateGameScene();
+            UIManager.Instance.OpenWindow<MainMenu>();
         }
 
         public void Update()
         {
-            if (State == GameState.Gaming)
-            {
-                
-            }
+            GameMode?.GameUpdate(Time.deltaTime);
         }
 
-        //加载游戏场景中的物体、UI等
-        private void CreateGameScene()
+        public void StartClassicMode()
         {
-            CreateEnvirament();
-            CreateRole();
+            GameMode = new ClassicMode();
+            GameMode.Init();
+            GameMode.Start();
         }
-
-
-        private void CreateRole()
-        {
-            //实例化角色
-            GameObject playerPrefab = ResourceManager.Instance.Load<RoleDock>();
-            Role = Instantiate(playerPrefab,GameTrans).GetComponent<RoleDock>();
-        }
-
-        private void CreateEnvirament()
-        {
-            GameObject envPrefab = ResourceManager.Instance.Load<GameObject>("Prefab/Env/NinjaVillage");
-            Instantiate(envPrefab,EnvTrans);
-        }
-
-        public void InitGame()
-        {
-
-        }
-
-
     }
-
     
 }

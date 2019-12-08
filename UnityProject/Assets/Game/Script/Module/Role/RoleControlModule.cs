@@ -25,10 +25,10 @@ namespace NinjaJump
 
         public override void Awake()
         {
-            GameController.Instance.TouchBoard.ClickEvent += DoClick;
-            GameController.Instance.TouchBoard.DragEvent += DoDrag;
-            GameController.Instance.TouchBoard.BeginDragEvent += DoBeginDrag;
-            GameController.Instance.TouchBoard.EndDragEvent += DoEndDrag;
+            GameController.Instance.GameMode.TouchBoard.ClickEvent += DoClick;
+            GameController.Instance.GameMode.TouchBoard.DragEvent += DoDrag;
+            GameController.Instance.GameMode.TouchBoard.BeginDragEvent += DoBeginDrag;
+            GameController.Instance.GameMode.TouchBoard.EndDragEvent += DoEndDrag;
             m_actionModule = m_dock.GetModule<RoleActionModule>();
         }
 
@@ -74,10 +74,10 @@ namespace NinjaJump
 
         public override void Destroy()
         {
-            GameController.Instance.TouchBoard.ClickEvent -= DoClick;
-            GameController.Instance.TouchBoard.DragEvent -= DoDrag;
-            GameController.Instance.TouchBoard.BeginDragEvent -= DoBeginDrag;
-            GameController.Instance.TouchBoard.EndDragEvent -= DoEndDrag;
+            GameController.Instance.GameMode.TouchBoard.ClickEvent -= DoClick;
+            GameController.Instance.GameMode.TouchBoard.DragEvent -= DoDrag;
+            GameController.Instance.GameMode.TouchBoard.BeginDragEvent -= DoBeginDrag;
+            GameController.Instance.GameMode.TouchBoard.EndDragEvent -= DoEndDrag;
         }
 
     }
