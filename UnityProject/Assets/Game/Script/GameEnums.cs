@@ -34,6 +34,7 @@ namespace NinjaJump
         Jump,
         Move,
         Attack,
+        Land,
         Hold,
         Aim,
         Dying

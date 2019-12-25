@@ -48,7 +48,7 @@ namespace GameBase.Pool
         }
 
 
-        public Production Spawn(Transform parent, float lifeTime = 0)
+        public Production Spawn(Transform parent, float lifeTime)
         {
             //如果设置了最大值,并且存活对象达到了最大限制,则先回收
             if (Max > 0 && ActivatedSet.Count >= Max)
@@ -145,6 +145,7 @@ namespace GameBase.Pool
                 LifeTime = lifeTime,
             };
 
+            obj.SetActive(true);
             ActivatedSet.Add(production);
             return production;
         }

@@ -23,6 +23,7 @@ namespace NinjaJump
 
         public virtual void Init(){}
         public virtual void Awake(){}
+        public virtual void Start(){}
         public virtual void Update(){}
         public virtual void OnEnable(){}
         public virtual void OnDisable(){}
@@ -30,6 +31,7 @@ namespace NinjaJump
 
     }
 
+    [AttributeUsage(AttributeTargets.Class,AllowMultiple=true)]
     public class RequireModuleAttribute : Attribute
     {
         public Type type;

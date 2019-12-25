@@ -7,7 +7,7 @@ using GameBase.Editor;
 namespace NinjaJump
 {
 
-    [Resource("")]
+    [Resource("Settings/GameSetting")]
     [CreateAssetMenu(menuName = "GameAssets/Settings/GameSetting",fileName = "GameSetting")]
     public class GameSetting : LocalAsset<GameSetting>
     {
@@ -15,7 +15,8 @@ namespace NinjaJump
         public float BoardSpaceMin;
         [RenameField("木板最大间距")]
         public float BoardSpaceMax;
-
+        [RenameField("总共木板对象的数量")]
+        public int BoardListLength;
     }
 
 }

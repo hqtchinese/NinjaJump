@@ -15,7 +15,7 @@ namespace NinjaJump
         public bool Lerp;
         public float LerpRate;
 
-        [HideInInspector]
+        // [HideInInspector]
         public Vector2 Position;
         private Vector2 ViewPos => GameController.Instance.ViewPos;
         private LinkedList<SpriteRenderer> m_spriteList;
@@ -31,13 +31,9 @@ namespace NinjaJump
         public void Update()
         {   
             if (Lerp)
-            {
                 transform.position = Vector3.Lerp(transform.position,(Position - ViewPos) * Factor,LerpRate);
-            }
             else
-            {
                 transform.position = (Position - ViewPos) * Factor;
-            }
 
             if (VerticleLoop)
                 CheckChildren();
@@ -88,8 +84,8 @@ namespace NinjaJump
             }
             else if (m_tempHeight > ViewPos.y)
             {
-                SpriteRenderer lowestSprite = m_spriteList.Last.Value;
-                if (lowestSprite.transform.position.y >  ScreenSpaceHelper.TopY + lowestSprite.size.y / 2)
+                SpriteRenderer highestSprite = m_spriteList.Last.Value;
+                if (highestSprite.transform.position.y >  ScreenSpaceHelper.TopY + highestSprite.size.y / 2)
                 {
                     TopToBottom();
                 }

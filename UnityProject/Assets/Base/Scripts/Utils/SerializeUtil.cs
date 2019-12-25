@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SerializeUtil
 {
-    public static void SaveToPlayerPref(object obj, string key)
+    public static void SaveToPlayerPref(string key,object obj)
     {
         byte[] bytes = Serialize(obj);
         SetOpposite(bytes);

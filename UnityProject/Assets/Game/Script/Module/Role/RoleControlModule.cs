@@ -72,6 +72,22 @@ namespace NinjaJump
             m_actionModule.Jump();
         }
 
+        public override void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                m_dock.Status = RoleStatus.Move;
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                m_dock.Status = RoleStatus.Land;
+            }
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                m_dock.Status = RoleStatus.Hold;
+            }
+        }
+
         public override void Destroy()
         {
             GameController.Instance.GameMode.TouchBoard.ClickEvent -= DoClick;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GameBase;
+using Spine.Unity;
 
 namespace NinjaJump
 {
@@ -10,14 +11,23 @@ namespace NinjaJump
     {
         public Transform Arrow;
         public Transform ArrowCenter;
-        
+        [SpineAnimation]
+        public string MoveAnimeName;
+        [SpineAnimation]
+        public string LandAnimeName;
+        [SpineAnimation]
+        public string HangAnimeName;
+        public SkeletonAnimation Anime;
+        public PositionFixer PositionFixer;
+
         public RoleStatus Status { get; set; }
         public FaceDir Dir { get; set; }
 
         protected override void Init()
         {
+
             AddModule<RoleControlModule>();
         }
-
+        
     }
 }

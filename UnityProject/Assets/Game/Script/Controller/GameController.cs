@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using GameBase;
 using GameBase.UI;
 
@@ -9,11 +8,8 @@ namespace NinjaJump
 {
     public class GameController : MonoSingleton<GameController>
     {
-
         public Transform GameTrans;
         public Transform EnvTrans;
-
-
 
         public Vector2 ViewPos;
         public Vector2 Speed;
@@ -21,11 +17,16 @@ namespace NinjaJump
         public GameState State { get; private set; }
         public RoleDock Role { get; private set; }
         public GameModeBase GameMode { get; private set; }
-
+        public Player PlayerInfo { get; private set; }
 
         protected void Start()
         {
             UIManager.Instance.OpenWindow<MainMenu>();
+
+            PlayerInfo = SerializeUtil.LoadFromPlayerPref("Player") as Player;
+            if (PlayerInfo == null)
+                PlayerInfo = new Player();
+            
         }
 
         public void Update()
@@ -39,6 +40,12 @@ namespace NinjaJump
             GameMode.Init();
             GameMode.Start();
         }
+
+        protected void OnDestroy()
+        {
+            SerializeUtil.SaveToPlayerPref("Player",PlayerInfo);
+        }
+
     }
     
 }

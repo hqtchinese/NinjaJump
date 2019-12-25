@@ -12,9 +12,12 @@ namespace NinjaJump
         {
             ModuleList = new List<Module>();
             Init();
-            InitAllModule();
         }
 
+        protected void Start()
+        {
+            InitAllModule();
+        }
 
         //初始化方法,添加模块写在这里
         protected virtual void Init()

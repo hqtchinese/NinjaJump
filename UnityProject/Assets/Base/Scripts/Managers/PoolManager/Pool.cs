@@ -17,7 +17,7 @@ namespace GameBase.Pool
         }
 
 
-        public GameObject Spawn(GameObject obj, Transform parent, Action<GameObject> init, float lifeTime = 0)
+        public GameObject Spawn(GameObject obj, Transform parent, Action<GameObject> init, float lifeTime = float.MaxValue)
         {
             if (init == null)
                 throw new Exception("生成对象必须要有初始化方法!");

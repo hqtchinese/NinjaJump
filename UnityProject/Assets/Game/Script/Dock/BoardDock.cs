@@ -5,7 +5,7 @@ using GameBase;
 
 namespace NinjaJump
 {
-    [Resource("")]
+    [Resource("Prefab/Board/Board")]
     public class BoardDock : Dock
     {
         public SpriteRenderer TopSide,Board,BottomSide;
