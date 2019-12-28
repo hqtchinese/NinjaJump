@@ -41,12 +41,13 @@ namespace NinjaJump
             if (m_dock.Status != RoleStatus.Aim)
                 return;
 
-            float angleChange = m_dock.Dir == FaceDir.Left ? m_baseHeight - pos.y : pos.y - m_baseHeight;
+            float angleChange = m_dock.Dir == FaceDir.Right ? m_baseHeight - pos.y : pos.y - m_baseHeight;
 
             angleChange *= m_factor;
 
             float angle = Mathf.Clamp(Arrow.rotation.eulerAngles.z + angleChange,m_baseAngle - 80, m_baseAngle + 80);
 
+            Arrow.gameObject.SetActive(true);
             Arrow.rotation = Quaternion.Euler(0,0,angle);
 
             m_baseHeight = pos.y;
@@ -57,10 +58,10 @@ namespace NinjaJump
             if (m_dock.Status != RoleStatus.Hold)
                 return;
             
-            m_dock.Status = RoleStatus.Aim;
+            m_actionModule.SetAiming();
 
             m_baseHeight = pos.y;
-            m_baseAngle = m_dock.Dir == FaceDir.Left ? 90 : 270;
+            m_baseAngle = m_dock.Dir == FaceDir.Right ? 90 : 270;
             Arrow.rotation = Quaternion.Euler(0,0,m_baseAngle);
         }
 
@@ -68,24 +69,14 @@ namespace NinjaJump
         {
             if (m_dock.Status != RoleStatus.Aim)
                 return;
-                
+            
             m_actionModule.Jump();
+            Arrow.gameObject.SetActive(false);
         }
 
         public override void Update()
         {
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                m_dock.Status = RoleStatus.Move;
-            }
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                m_dock.Status = RoleStatus.Land;
-            }
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                m_dock.Status = RoleStatus.Hold;
-            }
+
         }
 
         public override void Destroy()

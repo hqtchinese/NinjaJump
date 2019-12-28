@@ -73,16 +73,6 @@ namespace GameBase
             DontDestroyOnLoad(gameObject);
         }
 
-        /// <summary>
-        /// 销毁游戏对象,主要提供给一些没有继承于MonoBehaviour的类使用
-        /// </summary>
-        /// <param name="obj"></param>
-        public void DestroyObj(GameObject obj)
-        {
-            if (obj) Destroy(obj);
-        }
-
-        
 
     }
 }

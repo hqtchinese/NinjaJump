@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GameBase;
 
 namespace NinjaJump
 {
@@ -9,8 +10,9 @@ namespace NinjaJump
     {
         private RoleAnimeModule m_animeModule;
         private float m_speed = 10;
-        private Vector2 m_moveDir;
+        private Vector2 m_velocity;
         private Transform transform;
+        private BoardDock m_holdBoard;
 
         public RoleActionModule(RoleDock dock) : base(dock)
         {
@@ -19,30 +21,66 @@ namespace NinjaJump
         public override void Awake()
         {
             m_animeModule = m_dock.GetModule<RoleAnimeModule>();
+            m_dock.CollisionHandler.CollisionEnterEvent += OnCollisionEnter;
             transform = m_dock.transform;
+        }
+
+        public override void Init()
+        {
+            m_speed = GameSetting.Asset.BaseRoleSpeed;
         }
 
         public override void Update()
         {
             if (m_dock.Status == RoleStatus.Jump)
             {
-                transform.Translate(m_moveDir * m_speed * Time.deltaTime);
+                m_velocity.y -= GameSetting.Asset.Gravity * Time.deltaTime;
+                Translate(m_velocity * Time.deltaTime);
             }
+        }
+
+        public void SetAiming()
+        {
+            SetStatus(RoleStatus.Aim);
         }
 
         public void Jump()
         {
-            Debug.Log("jump");
             if (m_dock.Status != RoleStatus.Aim)
                 return;
 
-            m_moveDir = m_dock.ArrowCenter.transform.position - transform.position;
+
+            m_dock.Dir = m_dock.Dir == FaceDir.Left ? FaceDir.Right : FaceDir.Left;
+            Vector2 moveDir = m_dock.ArrowCenter.transform.position - transform.position;
+            moveDir.Normalize();
+            m_velocity = moveDir * m_speed;
             
-            m_moveDir.Normalize();
-            m_dock.Status = RoleStatus.Jump;
-            m_animeModule.DoAnime();
+            SetStatus(RoleStatus.Jump);
+
+            EventManager.Instance.Broadcast(GameEvent.OnJumpOff,m_holdBoard);
+            m_holdBoard = null;
         }
         
-        
+        public void Translate(Vector2 offset)
+        {
+            m_dock.PositionFixer.Position += offset;
+        }
+
+        private void OnCollisionEnter(Collision2D collision)
+        {
+            if(!GameController.Instance.IsGaming)
+                return;
+            
+            if (GameSetting.Asset.BoardLayer == 1 << collision.collider.gameObject.layer)
+            {
+                m_holdBoard = collision.collider.GetComponent<BoardDock>();
+                SetStatus(RoleStatus.Hold);
+            }
+        }
+
+        private void SetStatus(RoleStatus status)
+        {
+            m_dock.Status = status;
+        }
     }
 }

@@ -19,13 +19,16 @@ namespace NinjaJump
         public string HangAnimeName;
         public SkeletonAnimation Anime;
         public PositionFixer PositionFixer;
+        public CollisionHandler2D CollisionHandler;
 
+        public Vector2 Position => PositionFixer.Position;
         public RoleStatus Status { get; set; }
         public FaceDir Dir { get; set; }
 
         protected override void Init()
         {
-
+            Dir = FaceDir.Left;
+            Status = RoleStatus.Aim;
             AddModule<RoleControlModule>();
         }
         

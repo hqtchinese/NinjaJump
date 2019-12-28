@@ -38,6 +38,10 @@ namespace GameBase.Pool
                 product = new Product(obj);
                 m_productDict.Add(obj,product);
                 Production production = product.Spawn(parent, lifeTime);
+                if (!m_instanceDict.ContainsKey(production.Obj))
+                {
+                    m_instanceDict.Add(production.Obj,production);
+                }
                 init(production.Obj);
                 return production.Obj;
             }
@@ -54,7 +58,14 @@ namespace GameBase.Pool
                 }
             }
             else
+            {
                 Debug.LogWarning("无法找到对象实例的记录");            
+            }
+        }
+
+        public void Despawn(Component component, bool isDestroy = false)
+        {
+            Despawn(component.gameObject,isDestroy);
         }
 
         public void Update()

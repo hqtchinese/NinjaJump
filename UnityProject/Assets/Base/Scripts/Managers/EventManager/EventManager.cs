@@ -67,7 +67,7 @@ namespace GameBase
                     for (int i = 0; i < delegates.Length; i++)
                     {
                         Delegate curDelegate = delegates[i];
-                        if (curDelegate.Target as UnityEngine.Object != null)
+                        if (curDelegate.Target as System.Object != null)
                         {
                             curDelegate.Method.Invoke(curDelegate.Target,new object[]{param});
                         }
@@ -85,9 +85,11 @@ namespace GameBase
 
         private void Register(Type type, object obj, EventDelegate registEvent)
         {
-            if (!(registEvent.Target is UnityEngine.Object))
+            //这里主要是为了方便解绑,所以不允许绑定匿名函数,没找到什么有效的判断方式,
+            //暂时使用方法定义类型的定义类型来判断
+            if (registEvent.Method.DeclaringType.DeclaringType != null)
             {
-                Debug.LogWarning("注册的委托必须是UnityEngine.Object子类对象下的方法,且不允许使用匿名函数");
+                Debug.LogError("不允许使用匿名方法或者嵌套类中的方法");
                 return;
             }
 

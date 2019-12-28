@@ -10,28 +10,31 @@ namespace NinjaJump
     public class ClassicMode : GameModeBase
     {
         private const string POOL_NAME = "ClassicModePool";
-
-        private RoleDock Role;
-        private List<BoardDock> BoardList;
+        private RoleDock m_role;
+        private List<BoardDock> m_boardList;
         private Pool m_pool;
         private GameObject m_boardPrefab;
         private Transform m_boardTrans;
         private Vector2 m_viewOffset;
+        private bool m_nextBoardIsLeft;
+        private float m_curBoardHeight;
 
         public override void Init()
         {
             m_pool = PoolManager.Instance[POOL_NAME];
             m_viewOffset = new Vector2(0,ScreenSpaceHelper.ScreenHeight * 0.25f);
+            m_nextBoardIsLeft = true;
 
             InitUI();
             InitEnvirament();
-            InitRole();
             InitBoard();
+            InitRole();
+            EventManager.Instance.Register(GameEvent.OnJumpOff,OnRoleJumpOff);
         }
 
         public override void Start()
         {
-            
+            GameController.Instance.SetGaming();
         }
 
         public override void EndGame()
@@ -41,9 +44,9 @@ namespace NinjaJump
 
         public override void GameUpdate(float deltaTime)
         {
-            if (Role)
+            if (m_role)
             {
-                GameController.Instance.ViewPos = new Vector2(0,Role.PositionFixer.Position.y + m_viewOffset.y);
+                GameController.Instance.ViewPos = new Vector2(0,m_role.PositionFixer.Position.y + m_viewOffset.y);
             }
         }
 
@@ -51,7 +54,11 @@ namespace NinjaJump
         {
             int boardID = GameController.Instance.PlayerInfo.boardID;
             m_boardPrefab = SkinSetting.Asset.GetBoardSkin(boardID);
-            BoardList = new List<BoardDock>();
+            m_boardList = new List<BoardDock>();
+            for (int i = 0; i < GameSetting.Asset.BoardListLength; i++)
+            {
+                SpawnNextBoard();
+            }
         }
 
         private void InitUI()
@@ -69,7 +76,7 @@ namespace NinjaJump
                 rolePrefab = SkinSetting.Asset.GetRoleSkin(0);
 
             m_pool.Spawn(rolePrefab,GameController.Instance.GameTrans,(obj) => {
-                Role = obj.GetComponent<RoleDock>();
+                m_role = obj.GetComponent<RoleDock>();
             });
             
         }
@@ -81,7 +88,7 @@ namespace NinjaJump
             if (!envPrefab) 
                 envPrefab = SkinSetting.Asset.GetEnvSkin(0);
 
-            GameObject.Instantiate(envPrefab,GameController.Instance.EnvTrans);
+            m_pool.Spawn(envPrefab,GameController.Instance.EnvTrans,(obj) => {});
         }
 
         private void CheckBoard()
@@ -89,6 +96,49 @@ namespace NinjaJump
             
         }
 
-    }
+        private Vector2 GetNextBoardPos()
+        {
+            Vector2 pos = new Vector2();
+            if (m_nextBoardIsLeft)
+            {
+                pos.x = -GameSetting.Asset.BoardHorizonOffset;
+            }
+            else
+            {
+                pos.x = GameSetting.Asset.BoardHorizonOffset;
+            }
+            m_nextBoardIsLeft = !m_nextBoardIsLeft;
 
+            float randomRise = Random.Range(GameSetting.Asset.BoardSpaceMin,GameSetting.Asset.BoardSpaceMax);
+            m_curBoardHeight = m_curBoardHeight + randomRise;
+            pos.y = m_curBoardHeight;
+
+            return pos;
+        }
+
+        private void OnRoleJumpOff(object[] param)
+        {
+            BoardDock board = param.GetValue(0) as BoardDock;
+
+            if (board)
+                m_pool.Despawn(board);
+
+            SpawnNextBoard();
+        }
+
+        private void SpawnNextBoard()
+        {
+            m_pool.Spawn(m_boardPrefab,GameController.Instance.GameTrans,InitBoard);
+        }
+
+        private void InitBoard(GameObject obj)
+        {
+            BoardDock board = obj.GetComponent<BoardDock>();
+            board.Length = 5;
+            board.GetModule<BoardSizeModule>().Resize();
+            PositionFixer pf = board.GetComponent<PositionFixer>();
+            pf.Position = GetNextBoardPos();
+            pf.FixPos();
+        }
+    }
 }

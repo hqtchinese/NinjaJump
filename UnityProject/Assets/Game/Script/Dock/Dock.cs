@@ -50,6 +50,15 @@ namespace NinjaJump
             }
         }
 
+        protected virtual void LateUpdate()
+        {
+            foreach (var module in ModuleList)
+            {
+                if (module.Enable)
+                    module.LateUpdate();
+            }
+        }
+
         protected virtual void OnDisable()
         {
             foreach (var module in ModuleList)
@@ -76,7 +85,7 @@ namespace NinjaJump
             }
 
             module.Awake();
-            Debug.Log($"{gameObject.name}增加模块:{module.GetType().Name}");
+            //Debug.Log($"{gameObject.name}增加模块:{module.GetType().Name}");
             return module;
         }
 

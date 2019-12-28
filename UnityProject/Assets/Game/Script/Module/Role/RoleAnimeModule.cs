@@ -41,7 +41,7 @@ namespace NinjaJump
 
         private void Turn()
         {
-
+            m_skeleton.ScaleX = m_dock.Dir == FaceDir.Left ? -1 : 1;                
         }
 
         public void DoAnime()
@@ -61,6 +61,7 @@ namespace NinjaJump
                     }
                     case RoleStatus.Jump:
                     {
+                        m_animationState.SetAnimation(0,m_moveAnime,true);
                         break;
                     }
                     case RoleStatus.Hold:

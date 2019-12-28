@@ -41,10 +41,8 @@ namespace GameBase.Pool
             float diff = (production1.BornTime + production1.LifeTime) - (production2.BornTime + production2.LifeTime);
             if (diff > 0)
                 return 1;
-            else if (diff < 0)
-                return -1;
             else 
-                return 0;
+                return -1;
         }
 
 
@@ -65,7 +63,7 @@ namespace GameBase.Pool
             ActivatedSet.Remove(production);
             if (isDestroy)
             {
-                GameMain.Instance.DestroyObj(production.Obj);
+                GameObject.Destroy(production.Obj);
             }
             else
             {
@@ -93,12 +91,12 @@ namespace GameBase.Pool
         {
             foreach (var production in ActivatedSet)
             {
-                GameMain.Instance.DestroyObj(production.Obj);
+                GameObject.Destroy(production.Obj);
             }
 
             foreach (var production in RecycledSet)
             {
-                GameMain.Instance.DestroyObj(production.Obj);
+                GameObject.Destroy(production.Obj);
             }
 
             ActivatedSet = null;
@@ -137,7 +135,7 @@ namespace GameBase.Pool
 
         private Production CreateNewInstance(Transform parent, float lifeTime)
         {
-            GameObject obj = GameMain.Instantiate(prefab,parent);
+            GameObject obj = GameObject.Instantiate(prefab,parent);
             Production production = new Production(this)
             {
                 Obj = obj,

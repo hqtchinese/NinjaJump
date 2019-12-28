@@ -16,7 +16,11 @@ namespace NinjaJump
         OnGameStart,
         OnGamePause,
         OnGameResume,
-        OnGameOver
+        OnGameOver,
+
+
+        OnJumpOff,
+        
     }
 
     public enum GameState

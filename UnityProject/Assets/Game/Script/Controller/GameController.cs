@@ -15,9 +15,13 @@ namespace NinjaJump
         public Vector2 Speed;
 
         public GameState State { get; private set; }
+        public bool IsGaming => State == GameState.Gaming;
+
         public RoleDock Role { get; private set; }
         public GameModeBase GameMode { get; private set; }
         public Player PlayerInfo { get; private set; }
+
+
 
         protected void Start()
         {
@@ -46,6 +50,17 @@ namespace NinjaJump
             SerializeUtil.SaveToPlayerPref("Player",PlayerInfo);
         }
 
+
+        public void SetGaming()
+        {
+            State = GameState.Gaming;
+        }
+
+        public void SetPause()
+        {
+            State = GameState.Pause;
+        }
+        
     }
     
 }
