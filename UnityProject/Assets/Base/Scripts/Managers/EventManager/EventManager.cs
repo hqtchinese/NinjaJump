@@ -1,16 +1,17 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
+
 namespace GameBase
 {
     public class EventManager : ManagerBase<EventManager>
     {
-        public delegate void EventDelegate (params object[] param);
-        private Dictionary<Type,Dictionary<object,EventDelegate>> m_eventDict;
-
+        public delegate void EventDelegate (object[] param);
+        private Dictionary<Type,Dictionary<object,List<InvokeInfo>>> m_eventDict;
         private void Awake() 
         {
-            m_eventDict = new Dictionary<Type, Dictionary<object, EventDelegate>>();
+            m_eventDict = new Dictionary<Type, Dictionary<object, List<InvokeInfo>>>();
         }
 
         public void Broadcast(string eventName, params object[] param)
@@ -23,36 +24,86 @@ namespace GameBase
             Broadcast(_enum.GetType(), _enum, param);
         }
 
-        public void Register(string eventName, EventDelegate registEvent)
+        public void Register(Component comp) 
         {
-            Register(typeof(string),eventName,registEvent);
+            Type type = comp.GetType();
+            MethodInfo[] methods = type.GetMethods();
+            for (int i = 0; i < methods.Length; i++)
+            {
+                Attribute[] attrs = Attribute.GetCustomAttributes(methods[i]);
+                for (int j = 0; j < attrs.Length; j++)
+                {
+                    if(attrs[j] is RegistEventAttribute)
+                    {
+                        try
+                        {
+                            RegistEventAttribute attr = attrs[j] as RegistEventAttribute;
+                            InvokeInfo invokeInfo = new InvokeInfo();
+                            invokeInfo.method = methods[i];
+                            invokeInfo.target = comp;
+                            Register(attr.eventType.GetType(), attr.eventType, invokeInfo);
+                            Debug.Log($"方法注册成功:{type.Name}.{methods[i].Name}");
+                        }
+                        catch (System.Exception)
+                        {
+                            Debug.LogError($"方法注册失败:{type.Name}.{methods[i].Name}");
+                        }
+                    }
+                }
+            }
         }
 
-        public void Register(Enum _enum, EventDelegate registEvent)
+        public void Register(object eventName, EventDelegate registEvent)
         {
-            Register(_enum.GetType(), _enum, registEvent);
+            Register(eventName.GetType(),eventName, new InvokeInfo(registEvent));
         }
 
-        public void Unregister(Enum _enum, EventDelegate unregistEvent)
+        public void Unregister(Component comp)
         {
-            Unregister(_enum.GetType(), _enum, unregistEvent);
+            Type type = comp.GetType();
+            MethodInfo[] methods = type.GetMethods();
+            for (int i = 0; i < methods.Length; i++)
+            {
+                Attribute[] attrs = Attribute.GetCustomAttributes(methods[i]);
+                for (int j = 0; j < attrs.Length; j++)
+                {
+                    if(attrs[j] is RegistEventAttribute)
+                    {
+                        RegistEventAttribute attr = attrs[j] as RegistEventAttribute;
+                        InvokeInfo invokeInfo = new InvokeInfo();
+                        invokeInfo.method = methods[i];
+                        invokeInfo.target = comp;
+                        Unregister(attr.eventType.GetType(), attr.eventType, invokeInfo);
+                    }
+                }
+            }
         }
 
-        public void Unregister(string eventName, EventDelegate unregistEvent)
+        public void Unregister(object eventName, EventDelegate unregistEvent)
         {
-            Unregister(typeof(string), eventName, unregistEvent);
+            Unregister(eventName.GetType(), eventName, new InvokeInfo(unregistEvent));
         }
 
-        private void Unregister(Type type, object eventType, EventDelegate unregistEvent)
+        private void Unregister(Type type, object eventType, InvokeInfo invokeInfo)
         {
             if (m_eventDict.TryGetValue(type, out var eventDict))
             {
-                if (eventDict.TryGetValue(eventType, out EventDelegate eventDelegate))
+                if (eventDict.TryGetValue(eventType, out List<InvokeInfo> invokeList))
                 {
-                    if ((eventDelegate -= unregistEvent) == null)
+                    for (int i = 0; i < invokeList.Count; i++)
                     {
-                        eventDict.Remove(eventType);
+                        if (invokeList[i].target == invokeInfo.target
+                            && invokeList[i].method == invokeInfo.method)
+                        {
+                            invokeList.RemoveAt(i);
+                            break;
+                        }
                     }
+                    if (invokeList.Count == 0)
+                        eventDict.Remove(eventType);
+
+                    if (m_eventDict.Count == 0)
+                        m_eventDict.Remove(type);
                 }
             }
         }
@@ -61,54 +112,56 @@ namespace GameBase
         {
             if (m_eventDict.TryGetValue(type, out var eventDict))
             {
-                if (eventDict.TryGetValue(eventType, out EventDelegate eventDelegate))
+                if (eventDict.TryGetValue(eventType, out var invokeList))
                 {
-                    Delegate[] delegates = eventDelegate.GetInvocationList();
-                    for (int i = 0; i < delegates.Length; i++)
+                    for (int i = 0; i < invokeList.Count; i++)
                     {
-                        Delegate curDelegate = delegates[i];
-                        if (curDelegate.Target as System.Object != null)
-                        {
-                            curDelegate.Method.Invoke(curDelegate.Target,new object[]{param});
-                        }
-                        else
-                        {
-                            if ((eventDelegate -= (curDelegate as EventDelegate)) == null)
-                            {
-                                eventDict.Remove(eventType);
-                            }
-                        }
+                        InvokeInfo invokeInfo = invokeList[i];
+                        invokeInfo.method.Invoke(invokeInfo.target,new object[]{param});
                     }
                 }
             }
         }
 
-        private void Register(Type type, object obj, EventDelegate registEvent)
+        private void Register(Type type, object eventType, InvokeInfo invokeInfo)
         {
-            //这里主要是为了方便解绑,所以不允许绑定匿名函数,没找到什么有效的判断方式,
-            //暂时使用方法定义类型的定义类型来判断
-            if (registEvent.Method.DeclaringType.DeclaringType != null)
+            if(m_eventDict.TryGetValue(type, out var eventDict))
             {
-                Debug.LogError("不允许使用匿名方法或者嵌套类中的方法");
-                return;
-            }
-
-            if (m_eventDict.TryGetValue(type, out var eventDict))
-            {
-                if (eventDict.TryGetValue(obj, out EventDelegate eventDelegate))
-                    eventDelegate += registEvent;
+                if (eventDict.TryGetValue(eventType,out var invokeList))
+                {
+                    invokeList.Add(invokeInfo);
+                }
                 else
-                    eventDict.Add(obj,registEvent);
+                {
+                    invokeList = new List<InvokeInfo>();
+                    invokeList.Add(invokeInfo);
+                    eventDict.Add(eventType,invokeList);
+                }
             }
             else
             {
-                Dictionary<object, EventDelegate> dict = new Dictionary<object, EventDelegate>();
-                dict.Add(obj,registEvent);
-                m_eventDict.Add(type,dict);
+                List<InvokeInfo> invokeList = new List<InvokeInfo>();
+                invokeList.Add(invokeInfo);
+                m_eventDict.Add(type,new Dictionary<object, List<InvokeInfo>>());
+                m_eventDict[type].Add(eventType,invokeList);
             }
         }
 
     }
 
+    public class InvokeInfo
+    {
+        public object target;
+        public MethodInfo method;
+        public InvokeInfo()
+        {
+
+        }
+        public InvokeInfo(EventManager.EventDelegate eventDelegate)
+        {
+            target = eventDelegate.Target;
+            method = eventDelegate.Method;
+        }
+    }
 }
 

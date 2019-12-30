@@ -2,7 +2,7 @@
 
 namespace GameBase
 {
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class,AllowMultiple = false)]
     public class ResourceAttribute : Attribute
     {
         public string ResPath { get; set; }

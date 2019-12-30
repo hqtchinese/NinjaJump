@@ -19,6 +19,7 @@ namespace NinjaJump
         OnGameOver,
 
 
+        OnHeightChange,
         OnJumpOff,
         
     }

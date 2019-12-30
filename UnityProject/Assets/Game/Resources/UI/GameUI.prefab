@@ -128,6 +128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hasMask: 0
+  CurHeight: {fileID: 8545089071659454516}
   TouchBoard: {fileID: 4286633295609917919}
 --- !u!1 &8871333223657444667
 GameObject:

@@ -32,6 +32,11 @@ namespace NinjaJump
 
         public override void Update()
         {
+            if(!GameController.Instance.IsGaming) 
+                return;
+
+            EventManager.Instance.Broadcast(GameEvent.OnHeightChange,m_dock.Position.y);
+
             if (m_dock.Status == RoleStatus.Jump)
             {
                 m_velocity.y -= GameSetting.Asset.Gravity * Time.deltaTime;

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +23,7 @@ namespace GameBase.UI
         protected virtual void Awake() 
         {
             FindParentWindow();
+            RegistEvent();
         }
 
         protected void FindParentWindow()
@@ -57,6 +59,10 @@ namespace GameBase.UI
             }
         }
 
+        private void RegistEvent()
+        {
+            EventManager.Instance.Register(this);
+        }
 
         public virtual void OnLostFocus()
         {
