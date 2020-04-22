@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class SerializeUtil
 {
+    protected const string CUSTOM_PARAM_SAVE_KEY = "_CustomKV_";
+
     public static void SaveToPlayerPref(string key,object obj)
     {
         byte[] bytes = Serialize(obj);
@@ -24,7 +26,16 @@ public class SerializeUtil
         {
             byte[] bytes = Convert.FromBase64String(data);
             SetOpposite(bytes);
-            return Deserialize(bytes);
+            object obj = null;
+            try
+            {
+                obj = Deserialize(bytes);
+            }
+            catch (System.Exception)
+            {
+                return null;
+            }
+            return obj;
         }
     }
 
@@ -47,7 +58,16 @@ public class SerializeUtil
             byte[] bytes = new byte[fs.Length];
             fs.Read(bytes,0,bytes.Length);
             SetOpposite(bytes);
-            return Deserialize(bytes);
+            object obj = null;
+            try
+            {
+                obj = Deserialize(bytes);
+            }
+            catch (System.Exception)
+            {
+                return null;
+            }
+            return obj;
         }
     }
 
@@ -81,4 +101,6 @@ public class SerializeUtil
             bytes[i] =(byte) ~bytes[i];
         }
     }
+    
 }
+

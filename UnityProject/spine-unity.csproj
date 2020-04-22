@@ -437,6 +437,21 @@
  <Reference Include="UnityEditor.Purchasing">
  <HintPath>G:/UnityProject/NinjaJump/UnityProject/Library/PackageCache/com.unity.purchasing@2.0.3/Editor/UnityEditor.Purchasing.dll</HintPath>
  </Reference>
+ <Reference Include="ICSharpCode.SharpZipLib">
+ <HintPath>G:/UnityProject/NinjaJump/UnityProject/Assets/Base/Plugin/Libs/ICSharpCode.SharpZipLib.dll</HintPath>
+ </Reference>
+ <Reference Include="NPOI">
+ <HintPath>G:/UnityProject/NinjaJump/UnityProject/Assets/Base/Plugin/Libs/NPOI.dll</HintPath>
+ </Reference>
+ <Reference Include="NPOI.OpenXml4Net">
+ <HintPath>G:/UnityProject/NinjaJump/UnityProject/Assets/Base/Plugin/Libs/NPOI.OpenXml4Net.dll</HintPath>
+ </Reference>
+ <Reference Include="NPOI.OpenXmlFormats">
+ <HintPath>G:/UnityProject/NinjaJump/UnityProject/Assets/Base/Plugin/Libs/NPOI.OpenXmlFormats.dll</HintPath>
+ </Reference>
+ <Reference Include="NPOI.OOXML">
+ <HintPath>G:/UnityProject/NinjaJump/UnityProject/Assets/Base/Plugin/Libs/NPOI.OOXML.dll</HintPath>
+ </Reference>
  <Reference Include="netstandard">
  <HintPath>G:/Unity/2018.4.12f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
  </Reference>

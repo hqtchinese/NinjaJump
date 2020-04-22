@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4940cb01ddc2f604b83489e7b8a3a01b, type: 3}
   m_Name: GameSetting
   m_EditorClassIdentifier: 
-  BoardSpaceMin: 3
-  BoardSpaceMax: 8
-  BoardListLength: 10
+  BoardSpaceMin: 2
+  BoardSpaceMax: 7
+  BoardPoolSize: 10
+  BoardLength: 7
   BoardHorizonOffset: 4.5
   BoardLayer:
     serializedVersion: 2
@@ -22,5 +23,5 @@ MonoBehaviour:
   RoleLayer:
     serializedVersion: 2
     m_Bits: 512
-  BaseRoleSpeed: 15
-  Gravity: 12
+  BaseRoleSpeed: 16
+  Gravity: 17

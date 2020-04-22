@@ -15,9 +15,9 @@ namespace GameBase
                 {
                     Object obj = GameObject.FindObjectOfType(typeof(T));
                     if(obj)
-                    {
                         m_instance = obj as T;
-                    }
+                    else
+                        m_instance = GameMain.Instance.gameObject.AddComponent<T>();
                 }
                 return m_instance;
             }
@@ -38,9 +38,8 @@ namespace GameBase
             get
             {
                 if(m_instance == null)
-                {
                     m_instance = new T();
-                }
+                    
                 return m_instance;
             }
         }

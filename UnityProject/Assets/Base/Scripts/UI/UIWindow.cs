@@ -5,37 +5,43 @@ using UnityEngine;
 namespace GameBase.UI
 {
     /// <summary>
-    /// UI窗口类,是一种用作装载其他UI元素的特殊UI元素
+    /// UI窗口类,作为特殊的面板，可以由UIManager来管理层级
     /// </summary>
-    public abstract class UIWindow : UIElement
+    public abstract class UIWindow : UIPanel
     {
         public bool hasMask;
         public override UIType Type => UIType.Window;
 
-        public virtual void Close()
+        protected Canvas m_mask;
+        
+        public override void Close()
         {
-            this.gameObject.SetActive(false);
-            OnClose();
+            UIManager.Instance.CloseWindow(this);
         }
 
-        public virtual void Open()
+        public override void Open()
         {
-            this.gameObject.SetActive(true);
-            OnOpen();
+            UIManager.Instance.OpenWindow(this);
         }
 
-        protected virtual void OnClose()
-        {
-
-        }
-
-        protected virtual void OnOpen()
+        public virtual void TurnToWindow()
         {
 
         }
-        protected override void OnDestroy()
+
+        public virtual void OnMaskClick(Vector2 pos)
         {
 
+        }
+
+        public void ResetMask()
+        {
+            if(!m_mask)
+                m_mask = UIManager.Instance.CreateMask(this);
+
+            Canvas canvas = GetComponent<Canvas>();
+            m_mask.gameObject.SetActive(true);
+            m_mask.sortingOrder = canvas.sortingOrder - 1;
         }
 
     }

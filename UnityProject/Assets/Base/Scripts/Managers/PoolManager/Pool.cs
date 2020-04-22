@@ -17,11 +17,8 @@ namespace GameBase.Pool
         }
 
 
-        public GameObject Spawn(GameObject obj, Transform parent, Action<GameObject> init, float lifeTime = float.MaxValue)
+        public GameObject Spawn(GameObject obj, Transform parent, Action<GameObject> init = null, float lifeTime = float.MaxValue)
         {
-            if (init == null)
-                throw new Exception("生成对象必须要有初始化方法!");
-
             if (m_productDict.TryGetValue(obj, out Product product))
             {
                 Production production = product.Spawn(parent, lifeTime);
@@ -30,7 +27,9 @@ namespace GameBase.Pool
                     m_instanceDict.Add(production.Obj,production);
                 }
 
-                init(production.Obj);
+                if(init != null)
+                    init(production.Obj);
+                    
                 return production.Obj;
             }
             else
@@ -42,7 +41,9 @@ namespace GameBase.Pool
                 {
                     m_instanceDict.Add(production.Obj,production);
                 }
-                init(production.Obj);
+                if(init != null)
+                    init(production.Obj);
+                
                 return production.Obj;
             }
         }

@@ -14,6 +14,7 @@ namespace GameBase.Tool.Tween
         public Transform Target { get; set; }
         public AnimationCurve Curve { get; set; }
         public float AnimationTime { get; set; }
+        public bool IsFinish { get; protected set; }
 
         protected Action Callback { get; set; }
         protected float m_timer { get; set; }
@@ -25,6 +26,7 @@ namespace GameBase.Tool.Tween
 
             m_timer = 0;
             Callback = null;
+            IsFinish = false;
         }
 
         public bool Process(float deltaTime)
@@ -32,6 +34,7 @@ namespace GameBase.Tool.Tween
             m_timer += deltaTime;
             if (m_timer < 0)
                 return false;
+            
             if (m_timer < AnimationTime)
             {
                 Action(m_timer / AnimationTime);
@@ -40,6 +43,7 @@ namespace GameBase.Tool.Tween
             else
             {
                 Action(1);
+                IsFinish = true;
                 Callback?.Invoke();
                 return true;
             }
@@ -61,6 +65,27 @@ namespace GameBase.Tool.Tween
         {
             Curve = CurveAsset.Asset.curveDict[type].curve;
             return this;
+        }
+
+        public void Stop()
+        {
+            IsFinish = true;
+            TweenManager.Instance.RemoveTweener(this);
+        }
+
+        public void FinishNow()
+        {
+            Action(1);
+            Stop();
+            Callback?.Invoke();
+        }
+
+        public void Rewind()
+        {
+            if(IsFinish)
+                TweenManager.Instance.AddTweener(this);
+            else
+                m_timer = 0;
         }
 
         protected abstract void Action(float factor);
@@ -106,6 +131,22 @@ namespace GameBase.Tool.Tween
         
     }
 
+    public class ScaleTweener : Tweener
+    {
+        public Vector3 EndScale { get; set; }
+        private Vector3 m_startScale;
+        public override void Init()
+        {
+            base.Init();
+            m_startScale = Target.localScale;
+        }
+
+        protected override void Action(float factor)
+        {
+            factor = Curve.Evaluate(factor);
+            Target.localScale = Vector3.LerpUnclamped(m_startScale,EndScale,factor);
+        }
+    }
 
     public class AnchoredPosTweener : Tweener
     {

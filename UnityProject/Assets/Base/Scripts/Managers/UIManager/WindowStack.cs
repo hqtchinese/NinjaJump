@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace GameBase.UI
 {
+    /// <summary>
+    /// 窗口栈,不是标准的栈,因为有移除中间元素和将中间元素推至栈顶的操作
+    /// </summary>
     public class WindowStack
     {
         public int Count => m_windows.Count;
@@ -72,6 +75,7 @@ namespace GameBase.UI
                 window.GetComponent<Canvas>().sortingOrder = m_windows.Count * BaseConst.UI_SORTING_ORDER_SPACE;
             }
             
+            return;
         }
 
         /// <summary>
@@ -83,8 +87,12 @@ namespace GameBase.UI
             foreach (var window in m_windows)
             {
                 Canvas canvas = window.GetComponent<Canvas>();
-                if (canvas)
+                if (canvas && canvas.gameObject.activeSelf)
+                {
                     canvas.sortingOrder = ++count * BaseConst.UI_SORTING_ORDER_SPACE;
+                    if(window.hasMask)
+                        window.ResetMask();
+                }
             }
         }
 
@@ -96,6 +104,12 @@ namespace GameBase.UI
         public bool Contains(UIWindow window)
         {
             return m_windows.Contains(window);
+        }
+
+        public void Remove(UIWindow window)
+        {
+            m_windows.Remove(window);
+            ResortLayer();
         }
 
         /// <summary>

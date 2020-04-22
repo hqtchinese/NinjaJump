@@ -11,6 +11,8 @@ namespace GameBase.Pool
         public GameObject Obj { get; set; }
         public float BornTime { get; set; }
         public float LifeTime { get; set; }
+        public int Index { get; set; }
+
         public Production(Product _product)
         {
             Product = _product;
@@ -22,7 +24,7 @@ namespace GameBase.Pool
     {
 
         public int Max { get; set; }
-
+        public int CurIndex { get; set; }
         private GameObject prefab;
         private SortedSet<Production> ActivatedSet { get; set; }
         private SortedSet<Production> RecycledSet { get; set; }
@@ -41,8 +43,12 @@ namespace GameBase.Pool
             float diff = (production1.BornTime + production1.LifeTime) - (production2.BornTime + production2.LifeTime);
             if (diff > 0)
                 return 1;
-            else 
+            else if(diff < 0)
                 return -1;
+            else if(diff == 0 && production1.Obj == production2.Obj)
+                return 0;
+            else 
+                return production1.Index - production2.Index;
         }
 
 
@@ -141,6 +147,7 @@ namespace GameBase.Pool
                 Obj = obj,
                 BornTime = GameMain.Instance.GameTime,
                 LifeTime = lifeTime,
+                Index = CurIndex++
             };
 
             obj.SetActive(true);

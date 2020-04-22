@@ -55,7 +55,7 @@ namespace NinjaJump
             int boardID = GameController.Instance.PlayerInfo.boardID;
             m_boardPrefab = SkinSetting.Asset.GetBoardSkin(boardID);
             m_boardList = new List<BoardDock>();
-            for (int i = 0; i < GameSetting.Asset.BoardListLength; i++)
+            for (int i = 0; i < GameSetting.Asset.BoardPoolSize; i++)
             {
                 SpawnNextBoard();
             }
@@ -134,7 +134,7 @@ namespace NinjaJump
         private void InitBoard(GameObject obj)
         {
             BoardDock board = obj.GetComponent<BoardDock>();
-            board.Length = 5;
+            board.Length = GameSetting.Asset.BoardLength;
             board.GetModule<BoardSizeModule>().Resize();
             PositionFixer pf = board.GetComponent<PositionFixer>();
             pf.Position = GetNextBoardPos();

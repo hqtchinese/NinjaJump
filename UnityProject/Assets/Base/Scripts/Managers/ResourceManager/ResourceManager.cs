@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Object = UnityEngine.Object;
-
-
 /*
     网上搜索Resources.Load本身就有缓存机制,但是也有人说自己做一份缓存效率会提高
     所以这里加载时根据参数来判断是否要缓存
@@ -21,8 +19,7 @@ namespace GameBase
         {
             if (cache)
             {
-                m_objDict.TryGetValue(path, out Object ret);
-                if(!ret)
+                if(!m_objDict.TryGetValue(path, out Object ret))
                 {
                     T obj = Resources.Load<T>(path);
                     if (obj)
@@ -52,8 +49,7 @@ namespace GameBase
         {
             if (cache)
             {
-                m_objDict.TryGetValue(path, out Object ret);
-                if(!ret)
+                if(!m_objDict.TryGetValue(path, out Object ret))
                 {
                     ret = Resources.Load(path);
                     if (ret)
@@ -78,7 +74,7 @@ namespace GameBase
 
         public GameObject Load<T>(bool cache = false) where T : MonoBehaviour
         {
-            ResourceAttribute attr = Attribute.GetCustomAttribute(typeof(T),typeof(ResourceAttribute)) as ResourceAttribute;
+            ResourceAttribute attr = Attribute.GetCustomAttribute(typeof(T),typeof(ResourceAttribute),false) as ResourceAttribute;
             if (attr != null)
                 return Load<GameObject>(attr.ResPath,cache);
             else

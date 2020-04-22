@@ -42,7 +42,6 @@ namespace GameBase
                             invokeInfo.method = methods[i];
                             invokeInfo.target = comp;
                             Register(attr.eventType.GetType(), attr.eventType, invokeInfo);
-                            Debug.Log($"方法注册成功:{type.Name}.{methods[i].Name}");
                         }
                         catch (System.Exception)
                         {

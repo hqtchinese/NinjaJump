@@ -16,45 +16,29 @@ namespace GameBase.UI
     public class UIElement : MonoBehaviour
     {
         public bool IsFocus { get; set; }
-        protected UIWindow ParentWindow { get; set; }
+        protected UIPanel ParentPanel { get; set; }
 
         public virtual UIType Type => UIType.Element;
 
         protected virtual void Awake() 
         {
-            FindParentWindow();
+            FindParentPanel();
             RegistEvent();
         }
 
-        protected void FindParentWindow()
+        protected void FindParentPanel()
         {
-            Transform trans = transform;
-            int safeCount = 0;
-            while(true)
+            UIPanel panel = this as UIPanel;
+            if(panel)
             {
-                UIWindow tmp = trans.GetComponent<UIWindow>();
-                if (tmp)
+                ParentPanel = panel;
+            }
+            else
+            {
+                ParentPanel = transform.GetComponentInParent<UIPanel>();
+                if(!ParentPanel)
                 {
-                    ParentWindow = tmp;
-                    break;
-                }
-                else
-                {
-                    if (trans.transform.parent)
-                    {
-                        trans = trans.transform.parent;
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"对象:({gameObject.name})\n该UI元素不是一个窗口,且找不到他的上级窗口");
-                        break;
-                    }
-                }
-
-                if (++safeCount > BaseConst.UI_MAX_DEPTH)
-                {
-                    Debug.LogWarning($"对象:({gameObject.name})\n搜索层级超过{BaseConst.UI_MAX_DEPTH}层,停止寻找上级窗口");
-                    break;
+                    Debug.LogWarning("该UI元素不是UIPanel,并且找不到上级的UIPanel");
                 }
             }
         }

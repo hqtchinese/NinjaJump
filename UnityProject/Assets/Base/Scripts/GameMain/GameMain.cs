@@ -67,12 +67,20 @@ namespace GameBase
             return manager as T;
         }
 
-
         public void Init()
         {
             DontDestroyOnLoad(gameObject);
-        }
 
+            GameBaseSetting setting = GameBaseSetting.Asset;
+
+            Application.targetFrameRate = setting.fps;
+
+
+            if(setting.enableLog)
+                AddManager<LogManager>();
+            
+            
+        }
 
     }
 }

@@ -8,4 +8,9 @@ public static class VectorExt
     {
         return v3;
     }
+
+    public static Vector3 ToVec3(this Vector2 v2)
+    {
+        return v2;
+    }
 }

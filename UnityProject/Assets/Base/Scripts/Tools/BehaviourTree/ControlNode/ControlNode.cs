@@ -21,7 +21,7 @@ namespace GameBase.Tool.Behaviour
                     SubNodes[i].Prepare();
                 }
             }
-            m_curNodeIndex = 0;   
+            m_curNodeIndex = 0;
         }
         
         public override NodeStatus Begin()

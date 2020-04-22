@@ -1,28 +1,30 @@
 ﻿using UnityEngine;
 using GameBase.UI;
 using UnityEngine.UI;
+using GameBase.Editor;
 
 [RequireComponent(typeof(Button))]
 public class CloseButton : UIElement
-{
-    private Button m_button;
+{   
+    [RenameField("是否返回按钮")]
+    public bool IsReturn;
+    
     protected override void Awake() 
     {
         base.Awake();
-        m_button = transform.GetComponent<Button>();
-        if (m_button)
-            m_button.onClick.AddListener(CloseWindow);
+        Button button = transform.GetComponent<Button>();
+        if (button)
+            button.onClick.AddListener(OnBtnClick);
         else
             Debug.LogWarning("这个对象上找不到Button组件");
     }
 
-    private void CloseWindow()
+    private void OnBtnClick()
     {
-        ParentWindow?.Close();
+        if(IsReturn)
+            UIManager.Instance.Return();
+        else
+            ParentPanel?.Close();
     }
 
-    protected override void OnDestroy() 
-    {
-        base.OnDestroy();
-    }
 }

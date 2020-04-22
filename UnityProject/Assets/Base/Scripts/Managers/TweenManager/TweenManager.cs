@@ -27,8 +27,7 @@ namespace GameBase.Tool.Tween
                 EndPos = pos,
                 AnimationTime = time,
             };
-            tweener.Init();
-            m_tweenerList.Add(tweener);
+            AddTweener(tweener);
             return tweener;
         }
 
@@ -41,8 +40,20 @@ namespace GameBase.Tool.Tween
                 AnimationTime = time
             };
 
-            tweener.Init();
-            m_tweenerList.Add(tweener);
+            AddTweener(tweener);
+            return tweener;
+        }
+
+        public Tweener DoScale(Transform target,Vector3 scale,float time)
+        {
+            ScaleTweener tweener = new ScaleTweener()
+            {
+                Target = target,
+                EndScale = scale,
+                AnimationTime = time
+            };
+
+            AddTweener(tweener);
             return tweener;
         }
 
@@ -55,9 +66,19 @@ namespace GameBase.Tool.Tween
                 AnimationTime = time  
             };
 
+            AddTweener(tweener);
+            return tweener;
+        }
+
+        public void AddTweener(Tweener tweener)
+        {
             tweener.Init();
             m_tweenerList.Add(tweener);
-            return tweener;
+        }
+
+        public void RemoveTweener(Tweener tweener)
+        {
+            m_tweenerList.Remove(tweener);
         }
 
         private void ProcessTweener()
@@ -77,6 +98,7 @@ namespace GameBase.Tool.Tween
             }
         }
 
+        
     }
 
     

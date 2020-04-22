@@ -67,6 +67,13 @@ public static class CollectionExt
         return list[UnityEngine.Random.Range(0, list.Count)];
     }
 
+    /// <summary>
+    /// 转换成字典
+    /// </summary>
+    /// <param name="func"></param>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TVal"></typeparam>
+    /// <returns></returns>
     public static Dictionary<TKey,TVal> ToDict<TKey,TVal>(this List<TVal> list,Func<TVal,TKey> func)
     {
         Dictionary<TKey,TVal> dict = new Dictionary<TKey, TVal>();
@@ -76,6 +83,29 @@ public static class CollectionExt
         }
 
         return dict;
+    }
+
+    /// <summary>
+    /// 如果列表中不包含则新增
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    public static void AddIfNotContains<T>(this List<T> list, T item)
+    {
+        if(!list.Contains(item))
+            list.Add(item);
+    }
+
+    /// <summary>
+    /// 弹出
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    public static T Pop<T>(this List<T> list,int index)
+    {
+        T tmp = list[index];
+        list.RemoveAt(index);
+        return tmp;
     }
 
     #endregion

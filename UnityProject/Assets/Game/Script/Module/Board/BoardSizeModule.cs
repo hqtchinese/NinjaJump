@@ -23,7 +23,7 @@ namespace NinjaJump
             float halfLength = m_dock.Board.size.y / 2;
             m_dock.TopSide.transform.localPosition = new Vector2(0,halfLength);
             m_dock.BottomSide.transform.localPosition = new Vector2(0,-halfLength);
-            m_dock.Collider.size = boardSize;
+            m_dock.Collider.size = boardSize / 2;
         }
 
     }

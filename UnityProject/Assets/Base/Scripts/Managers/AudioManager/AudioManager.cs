@@ -87,7 +87,7 @@ namespace GameBase
 
         public void PlayAt(AudioClip audio, Vector3 pos)
         {
-            AudioSource.PlayClipAtPoint(audio,pos);
+            AudioSource.PlayClipAtPoint(audio,pos,AEVolume);
         }
 
         public void FadePitch(float pitch, float speed)
@@ -106,18 +106,17 @@ namespace GameBase
             StartCoroutine(_FadePitch(pitch,speed));
         }
 
-        private IEnumerator _FadePitch(float pitch,float speed)
+        private IEnumerator _FadePitch(float _pitch,float speed)
         {
-            while (Pitch != pitch)
+            float min = Pitch > _pitch ? _pitch : Pitch;
+            float max = Pitch > _pitch ? Pitch : _pitch;
+            while (Pitch != _pitch)
             {
-                Pitch = Mathf.Clamp(Pitch + speed * Time.deltaTime, Pitch > pitch ? pitch : Pitch, Pitch > pitch ? Pitch : pitch);
+                Pitch = Mathf.Clamp(Pitch + speed * Time.deltaTime, min, max);
                 yield return null;
             }
             yield return null;
         }
-
-        
-
 
     }
     
