@@ -8,6 +8,7 @@
         [Enum(Off,0,On,1)]_ZWrite("ZWrite",float) = 0
         [HDR]_Color ("Color",color) = (1,1,1,1)
         _MainTex ("Texture", 2D) = "white" {}
+        _UVanim("TexUVanim(XY),MaskUVanim(ZW)",vector) = (0,0,0,0)
         [Toggle]_HardEdge("HardEdge",int) = 0
         [HDR]_DisColor ("DisColor",color) = (1,1,1,0)
         _DisTex("Dissolve",2D) = "white" {}
@@ -58,6 +59,7 @@
             uniform float4 _Color;
             uniform float4 _DisColor;
             uniform float4 _Factor;
+            uniform float4 _UVanim;
 
             v2f vert (appdata v)
             {
@@ -78,9 +80,9 @@
                 // sample the texture 
                 float4 disTex = tex2D(_DisTex,i.uv0.zw + _Factor.zw * _Time.x);
                 float noise = dot(disTex.rgb,fixed3(0.3,0.59,0.11)) * disTex.a;
-                float4 maskTex = tex2D(_MaskTex,i.uv1.xy);
+                float4 maskTex = tex2D(_MaskTex,i.uv1.xy + _Time.x * _UVanim.zw);
                 maskTex.r = dot(maskTex.rgb, fixed3(0.3,0.59,0.11)) * maskTex.a;
-                float4 mainTex = tex2D(_MainTex, i.uv0.xy + (float2(noise,noise) * _Factor.y));
+                float4 mainTex = tex2D(_MainTex, i.uv0.xy + (float2(noise,noise) * _Factor.y) + _Time.x * _UVanim.xy);
 
                 float factor = 1 - _Factor.x ;
 #if _HARDEDGE_ON
